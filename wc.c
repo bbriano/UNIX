@@ -1,18 +1,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void count(FILE *, unsigned int *nl, unsigned int *nw, unsigned int *nc);
+void count(FILE *);
 
 // Wc counts the number of lines, words and characters for each file in the
 // argument list and prints it to the standard output. If no argument is
 // passed, it reads from the standard input.
 int main(int argc, char **argv) {
-	unsigned int nl, nw, nc;
 	FILE *f;
 
 	if (argc == 1) {
-		count(stdin, &nl, &nw, &nc);
-		printf("%8d%8d%8d\n", nl, nw, nc);
+		count(stdin);
 		return 0;
 	}
 
@@ -22,23 +20,23 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "wc: %s: No such file or directory\n", *argv);
 			continue;
 		}
-		count(f, &nl, &nw, &nc);
+		count(f);
 		fclose(f);
-		printf("%8d%8d%8d\n", nl, nw, nc);
 	}
 }
 
-// Count counts the number of lines, words and characters in f.
-void count(FILE *f, unsigned int *nl, unsigned int *nw, unsigned int *nc) {
+// Count prints the number of lines, words and characters in f to stdout.
+void count(FILE *f) {
+	unsigned int nl, nw, nc;
 	int c;
 	bool inword;
 
-	*nl = *nw = *nc = 0;
+	nl = nw = nc = 0;
 	inword = false;
 
 	while ((c = fgetc(f)) != EOF) {
-		(*nc)++;
-		(*nl) += c == '\n';
+		nc++;
+		nl += c == '\n';
 		switch (c) {
 		case ' ':
 		case '\t':
@@ -47,9 +45,11 @@ void count(FILE *f, unsigned int *nl, unsigned int *nw, unsigned int *nc) {
 			break;
 		default:
 			if (!inword) {
-				(*nw)++;
+				nw++;
 			}
 			inword = true;
 		}
 	}
+
+	printf("%8d%8d%8d\n", nl, nw, nc);
 }
