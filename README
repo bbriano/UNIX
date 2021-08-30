@@ -1,13 +1,10 @@
 UNIX tools with emphasis on source readability.
 
 Build everything:
-
-	make
+	$ make
 
 Build a specific program:
-
-	make wc
+	$ make wc
 
 Be clean:
-
-	make clean
+	$ make clean
