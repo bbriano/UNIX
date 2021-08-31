@@ -1,6 +1,7 @@
 CFLAGS = -Wall -Wextra
 BINS = cat wc
 
+.PHONY: all
 all: $(BINS)
 
 cat: cat.c
